@@ -150,8 +150,12 @@ pip install -r requirements.txt
 
 ```
 ### Run the application
-```
+
 1. **Start the services with Docker Compose:**
+   
+  PostgreSQL (db) on port 5432\
+  Prometheus on port 9090\
+  Grafana on port 3000
 
 ```bash
 docker-compose up
@@ -161,11 +165,65 @@ docker-compose up
 - **Qdrant:** [http://localhost:6333/](http://localhost:6333/)  
 - **Prometheus:** [http://localhost:9090/targets](http://localhost:9090/targets)  
 - **Grafana Dashboard:** [http://localhost:3000/](http://localhost:3000/)  
-  - **User:** admin  
+  - **Email or Username:** admin  
   - **Password:** admin  
 
 3. Run the Streamlit Application
 
 ```bash
 streamlit run main.py --server.address=0.0.0.0
+
+# Access the rag app in your browser
+Default app URL: http://localhost:8501
+
 ```
+🖼️ <img src="images/2.png" alt="Streamlit Rag App" width="600"/> 
+---
+
+🖼️ <img src="images/2drant.png" alt="Qdrant Dashboard" width="600"/> 
+---
+
+🖼️ <img src="images/3drant-vis.png" alt="qdrant vis" width="600"/>
+---
+
+🖼️ <img src="images/4.promethus.png" alt="Promethus satatus targe" width="600"/>
+---
+
+## Metrics
+
+The following metrics are exposed via **Prometheus**:
+
+| Metric                    | Description                         |
+|----------------------------|-------------------------------------|
+| `rag_request_count_total`  | Total number of queries processed   |
+| `rag_response_time_seconds`| Histogram of response time per request |
+| `rag_user_feedback_total`  | Counts of positive/negative feedback |
+| `rag_active_sessions`      | Number of active chat sessions     |
+
+## Configure the Grafana Dashboard with Promethus
+1. Open Grafana: [http://localhost:3000](http://localhost:3000)  
+2. Log in (`admin`/`admin` by default)  
+3. Add **Prometheus** as a data source (`http://localhost:9090`)  
+4. Create dashboards/panels for the above metrics or import a preconfigured dashboard  
+
+**Example queries:**
+
+- Total requests: `rag_request_count_total`  
+- Average response time: `rag_response_time_seconds_sum / rag_response_time_seconds_count`  
+- Active sessions: `rag_active_sessions`  
+- User feedback: `rag_user_feedback_total`
+  
+---
+
+## 🙌 Acknowledgments
+
+- [DataTalksClub](https://datatalks.club) for the LLM Zoomcamp  
+- xAI for the LLM Groq API  
+- My sincere gratitude to Alexey Grigorev and the DataTalksClub team for their expert guidance, valuable Slack  support, and for creating this exceptional learning opportunity of industry standard skills.
+
+---
+
+## 👤 Author
+
+Developed as part of LLM Zoomcamp 2025 by Muhammad Shifa
+
