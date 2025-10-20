@@ -124,6 +124,20 @@ medical-assistant-rag/
 - Docker & Docker Compose
 
 ### installation
+1. Using MakeFile
+   Run the following command to **create the Conda environment and check prerequisites**:
+   ```bash
+   # automatically create conda env and installed the required packages
+   make setup
+   # Format code with black and isort
+   make format
+
+   # Check all the available command in make
+   make help
+   ```
+   
+2. using conda and pip command manually
+```bash
 ```bash
 # create conda env of python 3.10
 conda create -n rag_app python=3.10
