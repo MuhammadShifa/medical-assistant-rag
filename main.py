@@ -69,6 +69,9 @@ if "last_selected_session" not in st.session_state:
     st.session_state.last_selected_session = "New Session"
 if "delete_triggered" not in st.session_state:
     st.session_state.delete_triggered = False
+# Track session start time for active sessions calculation
+if "session_start_time" not in st.session_state:
+    st.session_state.session_start_time = datetime.now()
 
 # ---------------- Sidebar ----------------
 with st.sidebar:
@@ -82,6 +85,7 @@ with st.sidebar:
         st.session_state.messages = []
         st.session_state.session_selected = "new"
         st.session_state.last_selected_session = "New Session"
+        st.session_state.session_start_time = datetime.now()  # Reset session timer
         st.rerun()
 
     st.markdown("---")
@@ -127,6 +131,7 @@ with st.sidebar:
                     st.session_state.messages = messages
                     st.session_state.session_selected = session["session_id"]
                     st.session_state.last_selected_session = display_name
+                    st.session_state.session_start_time = datetime.now()  # Reset session timer
                     st.rerun()
             with cols[1]:
                 if st.button("🗑️", key=f"delete_{session['session_id']}", help="Delete chat"):
@@ -136,6 +141,7 @@ with st.sidebar:
                         st.session_state.messages = []
                         st.session_state.session_selected = "new"
                         st.session_state.last_selected_session = "New Session"
+                        st.session_state.session_start_time = datetime.now()
                     st.session_state.delete_triggered = True
                     st.rerun()
         st.markdown('</div>', unsafe_allow_html=True)
@@ -189,6 +195,7 @@ if user_query := st.chat_input("Ask a medical question..."):
     with st.chat_message("assistant"):
         with st.spinner("Searching knowledge base..."):
             start = time.time()
+            # Track the request with proper timing
             answer = handle_user_query(user_query, qtype, top_k, rerank_k, llm_model)
             elapsed = time.time() - start
 
@@ -199,9 +206,16 @@ if user_query := st.chat_input("Ask a medical question..."):
         if chat_memory_enabled:
             save_message(st.session_state.session_id, "assistant", answer)
 
-        # Update metrics
-        record_llm_model(llm_model)
-        update_active_sessions(len(st.session_state.messages))
+        # Update metrics - FIXED: Only record model once per session
+        if len(st.session_state.messages) == 2:  # First user-assistant pair
+            record_llm_model(llm_model)
+        
+        # FIXED: Update active sessions based on session activity, not message count
+        session_age = (datetime.now() - st.session_state.session_start_time).total_seconds()
+        if session_age < 900:  # 15 minutes of inactivity
+            update_active_sessions(1)
+        else:
+            update_active_sessions(0)
 
         # Feedback Section
         st.write("### Was this answer helpful?")
