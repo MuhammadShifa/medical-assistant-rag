@@ -212,6 +212,9 @@ The following metrics are exposed via **Prometheus**:
 - Average response time: `rag_response_time_seconds_sum / rag_response_time_seconds_count`  
 - Active sessions: `rag_active_sessions`  
 - User feedback: `rag_user_feedback_total`
+
+🖼️ <img src="images/5-grafana.png" alt="Promethus satatus targe" width="600"/>
+
   
 ---
 
