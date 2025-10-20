@@ -1,0 +1,16 @@
+groq==0.32.0
+elasticsearch==9.1.1
+minsearch==0.0.7
+qdrant_client==1.15.1
+numpy==2.2.6
+prometheus_client==0.20.0
+psycopg2_binary==2.9.11
+python-dotenv==1.1.1
+sentence_transformers==5.1.1
+streamlit==1.50.0
+matplotlib==3.10.7
+pandas==2.3.3
+psutil==5.9.8
+scikit_learn==1.7.2
+seaborn==0.13.2
+tqdm==4.67.1
