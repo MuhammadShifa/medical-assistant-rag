@@ -39,7 +39,6 @@ It is ideal for evaluating retrieval and RAG systems because it includes structu
 ```
 medical-assistant-rag/
 │── main.py                  # Streamlit UI
-│── run_all.sh              # One-command script (setup + ingestion + run)
 │── requirements.txt        # Dependencies (main)
 │── docker-compose.yml      # container for qdrant, promethus, graffana
 │
